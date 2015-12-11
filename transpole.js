@@ -44,10 +44,10 @@ var transpole = (function () {
      *
      * @param  {String}   path    [description]
      * @param  {Object}   params  [description]
-     * @param  {Function} success [description]
-     * @param  {Function} error   [description]
+     * @param  {Function} resolve [description]
+     * @param  {Function} reject   [description]
      */
-    function request(path, params, success, error) {
+    function request(path, params, resolve, reject) {
         var requestObj,
             url,
             query;
@@ -60,23 +60,26 @@ var transpole = (function () {
 
         // perform request
         requestObj = new XMLHttpRequest();
+        requestObj.open('GET', url + '?' + query);
+        requestObj.responseType = 'json';
+
         requestObj.addEventListener('load', function (event) {
             var target = event.target;
 
             if (target.status === 200) {
                 if (target.response.message) {
-                    error(target.response);
+                    reject(new Error(event));
                 } else {
-                    success(target.response);
+                    resolve(target.response);
                 }
             } else {
-                // what to do ??
-                error(event);
+                reject(new Error(event));
             }
         });
 
-        requestObj.open('GET', url + '?' + query);
-        requestObj.responseType = 'json';
+        requestObj.addEventListener('error', function (event) {
+            reject(new Error(event));
+        });
 
         requestObj.send();
     }
@@ -101,8 +104,8 @@ var transpole = (function () {
         };
 
         return {
-            then: function (success, error) {
-                request('/nextSchedule', params, success, error);
+            then: function (resolve, reject) {
+                request('/nextSchedule', params, resolve, reject);
             }
         };
     }
