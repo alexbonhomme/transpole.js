@@ -41,26 +41,21 @@ var transpole = (function () {
     }
 
     /**
-     *
-     * @param  {String}   path    [description]
+     * Basic XHR request implementation.
+     * @param  {String}   url     [description]
      * @param  {Object}   params  [description]
      * @param  {Function} resolve [description]
-     * @param  {Function} reject   [description]
+     * @param  {Function} reject  [description]
      */
-    function request(path, params, resolve, reject) {
-        var requestObj,
-            url,
-            query;
+    function request(url, params, resolve, reject) {
+        var requestObj = new XMLHttpRequest(),
+            urlWithParams = url;
 
-        // build url
-        url = options.apiProxyBase + path + '/' + API_SUBSIDIARY_ID;
+        if (params) {
+            urlWithParams += '?' + formatParams(params);
+        }
 
-        // build query params
-        query = formatParams(params);
-
-        // perform request
-        requestObj = new XMLHttpRequest();
-        requestObj.open('GET', url + '?' + query);
+        requestObj.open('GET', urlWithParams);
         requestObj.responseType = 'json';
 
         requestObj.addEventListener('load', function (event) {
@@ -84,6 +79,23 @@ var transpole = (function () {
         requestObj.send();
     }
 
+    /**
+     *
+     * @param  {String} endPoint [description]
+     * @param  {Object} params   [description]
+     * @return {Object}          [description]
+     */
+    function transpoleRequest(endPoint, params) {
+        var url = options.apiProxyBase + '/' + endPoint + '/' + API_SUBSIDIARY_ID;
+
+        return {
+            // pseudo promise
+            then: function (resolve, reject) {
+                request(url, params, resolve, reject);
+            }
+        };
+    }
+
     function lineId(lineName) {
         return 'transpole:Line:' + lineName;
     }
@@ -103,11 +115,7 @@ var transpole = (function () {
             wayId: direction
         };
 
-        return {
-            then: function (resolve, reject) {
-                request('/nextSchedule', params, resolve, reject);
-            }
-        };
+        return transpoleRequest('nextSchedule', params);
     }
 
     return function (options) {
