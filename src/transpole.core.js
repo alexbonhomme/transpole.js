@@ -73,8 +73,8 @@ function initTranspoleCore(context) {
 
     /**
      * Returns the three next schedules for the givent line name, stop name and direction.
-     * @param  {String}   lineName  [description]
-     * @param  {String}   stopName  [description]
+     * @param  {String}   lineId    [description]
+     * @param  {String}   stopId    [description]
      * @param  {String}   direction [description]
      * @return {Promise}            [description]
      */
