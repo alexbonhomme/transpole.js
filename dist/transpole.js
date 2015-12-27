@@ -51,36 +51,30 @@ function initTranspoleCore(context) {
     }
 
     /**
-     * @param  {String} lineName [description]
-     * @return {String}          [description]
-     */
-    function lineId(lineName) {
-        return 'transpole:Line:' + lineName;
-    }
-
-    /**
-     * @param  {String} stopName [description]
-     * @return {String}          [description]
-     */
-    function stopId(stopName) {
-        return 'transpole:StopArea:' + stopName;
-    }
-
-    /**
      * Publics
      */
 
     /**
-     * Return the three next schedules for the givent line name, stop name and direction.
+     * Lines listing.
+     * @return {Promise} [description]
+     */
+    Transpole.prototype.lines = function () {
+        return transpoleRequest.call(this, 'lines').then(function (data) {
+            return data.lines;
+        });
+    };
+
+    /**
+     * Returns the three next schedules for the givent line name, stop name and direction.
      * @param  {String}   lineName  [description]
      * @param  {String}   stopName  [description]
      * @param  {String}   direction [description]
      * @return {Promise}            [description]
      */
-    Transpole.prototype.next = function (lineName, stopName, direction) {
+    Transpole.prototype.next = function (lineId, stopId, direction) {
         var params = {
-            lineId: lineId(lineName),
-            stopId: stopId(stopName),
+            lineId: lineId,
+            stopId: stopId,
             wayId: direction
         };
 
