@@ -60,7 +60,7 @@ function initTranspoleCore(context) {
      */
     Transpole.prototype.lines = function () {
         return transpoleRequest.call(this, 'lines').then(function (data) {
-            return data.lines;
+            return data ? data.lines : [];
         });
     };
 
@@ -70,7 +70,7 @@ function initTranspoleCore(context) {
      */
     Transpole.prototype.stops = function () {
         return transpoleRequest.call(this, 'stops').then(function (data) {
-            return data.stops;
+            return data ? data.stops : [];
         });
     };
 
@@ -137,18 +137,18 @@ function initTranspoleAjax(context) {
                 var target = event.target;
 
                 if (target.status === 200) {
-                    if (target.response.message) {
-                        reject(new Error(target));
+                    if (target.response && target.response.message) {
+                        reject(target.response.message);
                     } else {
                         resolve(target.response);
                     }
                 } else {
-                    reject(new Error(target));
+                    reject(target.statusText);
                 }
             });
 
             requestObj.addEventListener('error', function (event) {
-                reject(new Error(event));
+                reject(event.target.statusText);
             });
 
             requestObj.send();
