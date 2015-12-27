@@ -18,7 +18,8 @@ http.createServer(function (req, res) {
         res.writeHead(200, headers);
         res.end();
     } else {
-        exec('curl "' + API_BASE + req.url + '"', function (error, stdout) {
+        exec('curl "' + API_BASE + req.url + '"', {maxBuffer: 1024 * 500 // 500kB
+        }, function (error, stdout) {
             if (error) {
                 console.error(error);
             }
