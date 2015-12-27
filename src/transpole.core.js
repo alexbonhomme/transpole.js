@@ -57,7 +57,7 @@ function initTranspoleCore(context) {
      */
     Transpole.prototype.lines = function () {
         return transpoleRequest.call(this, 'lines').then(function (data) {
-            return data ? data.lines : [];
+            return data.lines;
         });
     };
 
@@ -67,7 +67,7 @@ function initTranspoleCore(context) {
      */
     Transpole.prototype.stops = function () {
         return transpoleRequest.call(this, 'stops').then(function (data) {
-            return data ? data.stops : [];
+            return data.stops;
         });
     };
 
