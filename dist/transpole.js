@@ -71,7 +71,17 @@ function initTranspoleCore(context) {
      */
 
     /**
-     * Return the three next schedules for the givent line name, stop name and direction.
+     * Lines listing.
+     * @return {Promise} [description]
+     */
+    Transpole.prototype.lines = function () {
+        return transpoleRequest.call(this, 'lines').then(function (data) {
+            return data.lines;
+        });
+    };
+
+    /**
+     * Returns the three next schedules for the givent line name, stop name and direction.
      * @param  {String}   lineName  [description]
      * @param  {String}   stopName  [description]
      * @param  {String}   direction [description]
