@@ -1,0 +1,6 @@
+{
+  "name": "transpole.js",
+  "version": "0.1.0",
+  "main": "./dist/transpole.min.js",
+  "license": "MIT"
+}
